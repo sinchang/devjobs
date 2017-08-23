@@ -1,44 +1,52 @@
 'use strict'
 const User = require('../model/user')
-// const mail = require('../common/mail')
-const Jwt = require('jsonwebtoken')
+const {
+  sentMailVerificationLink
+} = require('../common/mail')
+const {
+  sendError
+} = require('../common/errorHandler')
 const {
   encrypt,
-  decrypt
+  decrypt,
+  signToken,
+  verifyToken
 } = require('../common/crypto')
 
 exports.register = (req, res) => {
-  req.body.password = encrypt(req.body.password)
-  const user = new User(req.body)
+  const password = encrypt(req.body.password)
+  const user = new User({
+    password,
+    email: req.body.email,
+    username: req.body.username
+  })
 
   user.save()
     .then(user => {
-      const token = Jwt.sign({ username: user.username, id: user._id }, process.env.SECRET_KEY)
+      const token = signToken(user)
       return res.status(200).json({
         message: 'success',
         token
       })
     }).catch(err => {
       if (err.name === 'ValidationError') {
-        res.status(409).json({
+        res.status(400).json({
           message: err.message
         })
       } else {
-        res.status(500).json({
-          message: 'Oh uh, something went wrong'
-        })
+        sendError(res, err)
       }
     })
 }
 
 exports.updateInfo = (req, res) => {
-  const token = req.headers.token
-  var decoded = Jwt.verify(token, process.env.SECRET_KEY)
-  User.findByIdAndUpdate(decoded.id, req.body)
+  User.findByIdAndUpdate(req.id, req.body)
     .then(user => {
-      res.status(200).json({ message: 'success' })
+      res.status(200).json({
+        message: 'success'
+      })
     }).catch(err => {
-      res.status(500).json({ message: err.message })
+      sendError(res, err)
     })
 }
 
@@ -47,16 +55,20 @@ exports.login = (req, res) => {
     username: req.body.username
   }).then(user => {
     if (!user) {
-      res.status(404).json({ message: 'username does not exist' })
+      res.status(400).json({
+        message: 'user does not exist'
+      })
       return
     }
 
     if (req.body.password !== decrypt(user.password)) {
-      res.status(401).json({ message: 'incorrect password' })
+      res.status(400).json({
+        message: 'incorrect password'
+      })
       return
     }
 
-    const token = Jwt.sign({ username: user.username, id: user._id }, process.env.SECRET_KEY)
+    const token = signToken(user)
 
     res.cookie('devJobs', token)
     res.status(200).json({
@@ -65,6 +77,68 @@ exports.login = (req, res) => {
       username: user.username
     })
   }).catch(err => {
-    res.status(500).json({ message: err.message })
+    sendError(res, err)
+  })
+}
+
+exports.checkToken = (req, res, next) => {
+  const token = req.headers.token
+  const decoded = verifyToken(token)
+  if (!token || !decoded) {
+    res.status(401).json({
+      message: 'invalid token'
+    })
+    return
+  }
+
+  User.findOne({
+    username: decoded.username
+  }).then(user => {
+    if (!user) {
+      res.status(401).json({
+        message: 'invalid token'
+      })
+      return
+    }
+    req.username = decoded.username
+    req.id = decoded.id
+    next()
+  }).catch(err => {
+    res.status(500).json({
+      message: err.message
+    })
+  })
+}
+
+exports.sendMail = (req, res) => {
+  const email = req.body.email
+  if (!email) {
+    res.status(400).json({
+      message: 'email is required'
+    })
+    return
+  }
+
+  User.findOneAndUpdate({
+    email
+  }).then(user => {
+    if (!user) {
+      res.status(400).json({
+        message: 'email does not exist'
+      })
+      return
+    }
+
+    const token = signToken(user)
+
+    sentMailVerificationLink(user, token, req.body.url, (err, success) => {
+      if (err) {
+        sendError(res, err)
+        return
+      }
+      res.status(200).json({ message: 'success' })
+    })
+  }).catch(err => {
+    sendError(res, err)
   })
 }

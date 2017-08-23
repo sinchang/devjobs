@@ -19,33 +19,13 @@ const userSchema = new Schema({
     type: String,
     required: true
   },
-  companyName: {
-    type: String,
-    default: ''
-  },
-  companyLogo: {
-    type: String,
-    default: ''
-  },
-  companyWebsite: {
-    type: String,
-    default: ''
-  },
-  companyDesc: {
-    type: String,
-    default: ''
-  },
-  isVerified: {
-    type: Boolean,
-    default: false
-  },
   role: {
     type: String,
     default: 'member'
   }
 }, {
   timestamps: {
-    createdAt: 'created_at'
+    createdAt: 'createdAt'
   }
 })
 

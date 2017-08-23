@@ -1,5 +1,6 @@
 'use strict'
 const crypto = require('crypto')
+const Jwt = require('jsonwebtoken')
 const algorithm = 'aes-256-ctr'
 
 exports.decrypt = (password) => {
@@ -14,4 +15,21 @@ exports.encrypt = (password) => {
   let crypted = cipher.update(password, 'utf8', 'hex')
   crypted += cipher.final('hex')
   return crypted
+}
+
+exports.signToken = user => {
+  const token = Jwt.sign({
+    username: user.username,
+    id: user._id
+  }, process.env.SECRET_KEY, { expiresIn: '7d' })
+  return token
+}
+
+exports.verifyToken = token => {
+  try {
+    return Jwt.verify(token, process.env.SECRET_KEY)
+  } catch (err) {
+    console.log(err)
+    return false
+  }
 }
