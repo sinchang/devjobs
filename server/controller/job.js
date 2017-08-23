@@ -1,6 +1,8 @@
 'use strict'
 const Job = require('../model/job')
-const { sendError } = require('../common/errorHandler')
+const {
+  sendError
+} = require('../common/errorHandler')
 
 exports.create = (req, res) => {
   const job = new Job({
@@ -30,18 +32,29 @@ exports.getUserJobs = (req, res) => {
   }).populate('author', 'username')
     .exec()
     .then(jobs => {
-      const ret = []
-      jobs.forEach(job => {
-        ret.push({
-          createdAt: job.createdAt,
-          updatedAt: job.updatedAt,
-          title: job.title,
-          author: job.author.username
-        })
-      })
       res.status(200).json({
         message: 'success',
-        job: ret
+        data: jobs
+      })
+    }).catch(err => {
+      sendError(res, err)
+    })
+}
+
+exports.getJobs = (req, res) => {
+  const curPage = parseInt(req.query.curPage, 10) < 1 ? 0 : req.query.curPage - 1
+  const limit = req.query.limit || 10
+
+  Job.find({})
+    .populate('author', 'username')
+    .limit(limit)
+    .skip(curPage * limit)
+    .sort({ createdAt: -1 })
+    .exec()
+    .then(jobs => {
+      res.status(200).json({
+        message: 'success',
+        data: jobs
       })
     }).catch(err => {
       sendError(res, err)
