@@ -1,30 +1,43 @@
 module.exports = {
   /*
-  ** Headers of the page
-  */
+   ** Headers of the page
+   */
   head: {
     title: 'starter',
-    meta: [
-      { charset: 'utf-8' },
-      { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: 'Nuxt.js project' }
+    meta: [{
+      charset: 'utf-8'
+    },
+    {
+      name: 'viewport',
+      content: 'width=device-width, initial-scale=1'
+    },
+    {
+      hid: 'description',
+      name: 'description',
+      content: 'Nuxt.js project'
+    }
     ],
-    link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
-    ]
+    link: [{
+      rel: 'icon',
+      type: 'image/x-icon',
+      href: '/favicon.ico'
+    }]
   },
+  plugins: ['~plugins/vuetify.js'],
   /*
-  ** Global CSS
-  */
-  css: ['~/assets/css/main.css'],
+   ** Global CSS
+   */
+  css: [
+    '~/assets/css/main.css'
+  ],
   /*
-  ** Add axios globally
-  */
+   ** Add axios globally
+   */
   build: {
-    vendor: ['axios'],
+    vendor: ['axios', 'vuetify'],
     /*
-    ** Run ESLINT on save
-    */
+     ** Run ESLINT on save
+     */
     extend (config, ctx) {
       if (ctx.isClient) {
         config.module.rules.push({
@@ -32,6 +45,9 @@ module.exports = {
           test: /\.(js|vue)$/,
           loader: 'eslint-loader',
           exclude: /(node_modules)/
+        }, {
+          test: /\.styl$/,
+          loader: ['style-loader', 'css-loader', 'stylus-loader']
         })
       }
     }
