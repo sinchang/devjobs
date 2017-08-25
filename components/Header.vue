@@ -3,12 +3,12 @@
     <v-toolbar-title><a href="/" class="white--text">DeveloperJobs</a></v-toolbar-title>
     <v-spacer></v-spacer>
     </v-btn>
-    <v-toolbar-items class="hidden-sm-and-down" v-show="!username">
+    <v-toolbar-items v-show="!username">
       <v-btn flat class="white--text" @click="goLogin">登录</v-btn></a>
       <v-btn flat class="white--text" @click="goRegister">注册</v-btn>
     </v-toolbar-items>
     <v-menu v-show="username">
-      <v-btn flat slot="activator" class="hidden-sm-and-down white--text">{{username}}
+      <v-btn flat slot="activator" class="white--text">{{username}}
         <v-icon class="white--text">arrow_drop_down</v-icon>
       </v-btn>
       <v-list>

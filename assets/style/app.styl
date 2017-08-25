@@ -1,0 +1,42 @@
+// Specify overrides (theme and/or base variables etc.)
+// See https://vuetifyjs.com/quick-start
+$theme := {
+  primary: #4fc08d
+  accent: #ce93d8
+  secondary: #424242
+  info: #0D47A1
+  warning: #ffb300
+  error: #B71C1C
+  success: #2E7D32
+}
+
+// Import Vuetify styling
+@require '~vuetify/src/stylus/main.styl'
+
+.page
+  @extend .fade-transition
+
+html,
+body {
+  background-color: #fff;
+  color: #000;
+  letter-spacing: 0.5px;
+  font-family: "Source Sans Pro", Arial, sans-serif;
+  height: 100vh;
+  margin: 0;
+}
+
+footer {
+  padding: 20px;
+  text-align: center;
+  border-top: 1px solid #ddd;
+}
+
+.application > main > .container {
+  min-height: calc(100vh - 126px);
+  padding: 36px;
+}
+
+@media only screen and (max-width: 599px)
+  nav > .toolbar__content > *:not(.btn):last-child
+    margin-right: 0;

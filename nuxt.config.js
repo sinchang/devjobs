@@ -21,6 +21,9 @@ module.exports = {
       rel: 'icon',
       type: 'image/x-icon',
       href: '/favicon.ico'
+    }, {
+      rel: 'stylesheet',
+      href: 'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons'
     }]
   },
   plugins: ['~plugins/vuetify.js'],
@@ -28,26 +31,30 @@ module.exports = {
    ** Global CSS
    */
   css: [
-    '~/assets/css/main.css'
+    '~/assets/style/app.styl'
   ],
+  /*
+   ** Customize the progress-bar color
+   */
+  loading: {
+    color: '#3B8070'
+  },
   /*
    ** Add axios globally
    */
   build: {
     vendor: ['axios', 'vuetify'],
+    extractCSS: true,
     /*
      ** Run ESLINT on save
      */
     extend (config, ctx) {
-      if (ctx.isClient) {
+      if (ctx.dev && ctx.isClient) {
         config.module.rules.push({
           enforce: 'pre',
           test: /\.(js|vue)$/,
           loader: 'eslint-loader',
           exclude: /(node_modules)/
-        }, {
-          test: /\.styl$/,
-          loader: ['style-loader', 'css-loader', 'stylus-loader']
         })
       }
     }
