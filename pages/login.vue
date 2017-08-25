@@ -35,8 +35,13 @@ export default {
         password: this.password
       })
       if (data) {
-        console.log(this.$router.query)
+        location.href = '/'
       }
+    }
+  },
+  created () {
+    if (this.$store.state.token) {
+      location.href = '/'
     }
   },
   head () {

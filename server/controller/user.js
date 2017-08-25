@@ -166,7 +166,7 @@ exports.sendMail = (req, res) => {
 
     const token = signToken(user)
 
-    sentMailVerificationLink(user, token, (err, success) => {
+    sentMailVerificationLink(user, token, function (err, success) {
       if (err) {
         sendError(res, err)
         return

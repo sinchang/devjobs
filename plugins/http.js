@@ -6,7 +6,7 @@ const client = axios.create()
 
 const Http = function (options) {
   const cookie = Cookie.getJSON('devJobs')
-  client.defaults.headers.common['token'] = cookie.token
+  if (cookie) client.defaults.headers.common['token'] = cookie.token
 
   const onSuccess = response => {
     return response.data

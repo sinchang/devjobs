@@ -22,8 +22,6 @@
 
 <script>
 import { register } from '../plugins/http'
-// import toast from '../plugins/toast'
-// import { isEmail } from '../util'
 
 export default {
   data () {
@@ -43,8 +41,13 @@ export default {
         email: this.email
       })
       if (data) {
-        this.$router.redirect('/login')
+        location.href = '/login'
       }
+    }
+  },
+  created () {
+    if (this.$store.state.token) {
+      location.href = '/login'
     }
   },
   head () {

@@ -1,15 +1,29 @@
 <template>
-  <section class="container">
-    <v-btn small primary light>Small Button</v-btn>
-    hello world
-  </section>
 </template>
 
 <script>
 export default {
+  data () {
+    return {
+      items: [
+        {
+          title: 'Click Me'
+        },
+        {
+          title: 'Click Me'
+        },
+        {
+          title: 'Click Me'
+        },
+        {
+          title: 'Click Me 2'
+        }
+      ]
+    }
+  },
   head () {
     return {
-      title: 'Users'
+      title: '首页'
     }
   }
 }
