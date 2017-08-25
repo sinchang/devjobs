@@ -2991,6 +2991,10 @@ js-beautify@^1.6.3:
     mkdirp "~0.5.0"
     nopt "~3.0.1"
 
+js-cookie@^2.1.4:
+  version "2.1.4"
+  resolved "http://registry.npm.taobao.org/js-cookie/download/js-cookie-2.1.4.tgz#da4ec503866f149d164cf25f579ef31015025d8d"
+
 js-tokens@^3.0.0:
   version "3.0.2"
   resolved "https://registry.yarnpkg.com/js-tokens/-/js-tokens-3.0.2.tgz#9866df395102130e38f7f996bceb65443209c25b"
@@ -3529,6 +3533,12 @@ mute-stream@0.0.7:
 nan@^2.3.0:
   version "2.6.2"
   resolved "https://registry.yarnpkg.com/nan/-/nan-2.6.2.tgz#e4ff34e6c95fdfb5aecc08de6596f43605a7db45"
+
+native-toast@^1.2.1:
+  version "1.2.1"
+  resolved "http://registry.npm.taobao.org/native-toast/download/native-toast-1.2.1.tgz#e84ec9659546f56cbf1ce3b0f301e3fa11b7ecd7"
+  dependencies:
+    object-assign "^4.1.1"
 
 natural-compare@^1.4.0:
   version "1.4.0"

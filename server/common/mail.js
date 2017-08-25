@@ -31,7 +31,7 @@ function sendMail (to, subject, html, cb) {
 }
 
 exports.sentMailVerificationLink = (user, token, url, cb) => {
-  const mailbody = `hello, ${user.username}! 找回您的密码请点击<a href="${url}?t=${token}">Link</a>`
+  const mailbody = `hello, ${user.username}! 找回您的密码请点击<a href="${process.env.HOST}/resetpassword?t=${token}">Link</a>`
   sendMail(user.email, `[DeveloperJobs] 找回您的密码`, mailbody, (error, success) => {
     cb(error, success)
   })

@@ -11,7 +11,7 @@ router.post('/user/login', user.login)
 router.put('/user/info', user.checkToken, user.updateInfo)
 router.get('/user/jobs', user.checkToken, job.getUserJobs)
 
-router.post('/mail', user.sendMail)
+router.post('/user/mail', user.sendMail)
 
 router.post('/jobs', user.checkToken, job.create)
 router.get('/jobs', job.getJobs)

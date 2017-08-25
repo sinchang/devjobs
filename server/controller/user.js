@@ -1,5 +1,7 @@
 'use strict'
+const { isEmail } = require('../../util')
 const User = require('../model/user')
+
 const {
   sentMailVerificationLink
 } = require('../common/mail')
@@ -14,11 +16,34 @@ const {
 } = require('../common/crypto')
 
 exports.register = (req, res) => {
-  const password = encrypt(req.body.password)
+  const pw = req.body.password
+  const repassword = req.body.repassword
+  const username = req.body.username
+  const email = req.body.email
+
+  if (pw.length <= 6) {
+    return res.status(400).json({
+      message: 'The password length must be greater than 6'
+    })
+  }
+
+  if (pw !== repassword) {
+    return res.status(400).json({
+      message: 'The two passwords are not equal'
+    })
+  }
+
+  if (!isEmail(email)) {
+    return res.status(400).json({
+      message: 'Incorrect email'
+    })
+  }
+
+  const password = pw && encrypt(pw)
   const user = new User({
     password,
-    email: req.body.email,
-    username: req.body.username
+    email,
+    username
   })
 
   user.save()
@@ -51,8 +76,18 @@ exports.updateInfo = (req, res) => {
 }
 
 exports.login = (req, res) => {
+  const username = req.body.username.trim()
+  const password = req.body.password.trim()
+
+  if (!username || password.length <= 6) {
+    res.status(400).json({
+      message: 'username and password is required'
+    })
+    return
+  }
+
   User.findOne({
-    username: req.body.username
+    username
   }).then(user => {
     if (!user) {
       res.status(400).json({
@@ -61,7 +96,7 @@ exports.login = (req, res) => {
       return
     }
 
-    if (req.body.password !== decrypt(user.password)) {
+    if (password !== decrypt(user.password)) {
       res.status(400).json({
         message: 'incorrect password'
       })
@@ -70,11 +105,11 @@ exports.login = (req, res) => {
 
     const token = signToken(user)
 
-    res.cookie('devJobs', token)
+    res.cookie('devJobs', JSON.stringify({ token, username }), { expires: new Date(Date.now() + 360000 * 24 * 7) })
     res.status(200).json({
       message: 'success',
       token,
-      username: user.username
+      username
     })
   }).catch(err => {
     sendError(res, err)
@@ -119,7 +154,7 @@ exports.sendMail = (req, res) => {
     return
   }
 
-  User.findOneAndUpdate({
+  User.findOne({
     email
   }).then(user => {
     if (!user) {
@@ -131,7 +166,7 @@ exports.sendMail = (req, res) => {
 
     const token = signToken(user)
 
-    sentMailVerificationLink(user, token, req.body.url, (err, success) => {
+    sentMailVerificationLink(user, token, (err, success) => {
       if (err) {
         sendError(res, err)
         return
