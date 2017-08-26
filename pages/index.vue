@@ -1,7 +1,7 @@
 <template>
   <v-container fluid>
     <v-layout row>
-      <v-flex xs12 sm6 offset-sm3>
+      <v-flex xs12 md8 offset-md2 xl6 offset-xl3>
         <v-card>
           <v-toolbar class="blue-grey hidden-xs-only" dark>
             <v-toolbar-title>Jobs</v-toolbar-title>

@@ -12,12 +12,13 @@ const userSchema = new Schema({
     required: true
   },
   password: {
-    type: String,
-    required: true
+    type: String
   },
   email: {
-    type: String,
-    required: true
+    type: String
+  },
+  githubId: {
+    type: Number
   },
   role: {
     type: String,

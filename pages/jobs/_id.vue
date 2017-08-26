@@ -1,7 +1,7 @@
 <template>
   <v-container fluid>
     <v-layout row>
-      <v-flex xs12 sm6 offset-sm3>
+      <v-flex xs12 md8 offset-md2 xl6 offset-xl-3>
         <article>
           <div class="entry-meta">
             <a :href="`/user/${data.username}`">{{data.username}}</a> |

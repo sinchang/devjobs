@@ -10,7 +10,11 @@
             <v-text-field label="输入用户名" v-model="username" required></v-text-field>
             <v-text-field label="输入密码" v-model="password" required type="password"></v-text-field>
             <v-btn primary @click="loginHandle">登录</v-btn>
-            <p class="mt-3"><a href="/register">注册账号</a> | <a href="resetpassword">忘记密码</a></p>
+            <p class="mt-3">
+              <a href="/register">注册账号</a> |
+              <a href="/resetpassword">忘记密码</a> |
+              <a href="/github/login">使用 GitHub 登录</a>
+            </p>
           </v-card-text>
         </v-card>
       </v-flex>

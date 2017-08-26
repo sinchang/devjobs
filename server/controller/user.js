@@ -105,7 +105,7 @@ exports.login = (req, res) => {
 
     const token = signToken(user)
 
-    res.cookie('devJobs', JSON.stringify({ token, username }), { expires: new Date(Date.now() + 360000 * 24 * 7) })
+    res.cookie('devJobs', JSON.stringify({ token, username, isAdmin: user.role === 'admin' }), { expires: new Date(Date.now() + 360000 * 24 * 7) })
     res.status(200).json({
       message: 'success',
       token,
