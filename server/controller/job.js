@@ -5,10 +5,8 @@ const {
 } = require('../common/errorHandler')
 
 exports.create = (req, res) => {
-  const job = new Job({
-    title: req.body.title,
-    author: req.id
-  })
+  req.body.author = req.id
+  const job = new Job(req.body)
 
   job.save()
     .then(user => {
@@ -49,7 +47,9 @@ exports.getJobs = (req, res) => {
     .populate('author', 'username')
     .limit(limit)
     .skip(curPage * limit)
-    .sort({ createdAt: -1 })
+    .sort({
+      createdAt: -1
+    })
     .exec()
     .then(jobs => {
       res.status(200).json({

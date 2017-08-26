@@ -1,12 +1,13 @@
+/* eslint-disable */
 import express from 'express'
 import {
   Nuxt,
   Builder
 } from 'nuxt'
+require('dotenv').config()
 import bodyParser from 'body-parser'
 import Mongoose from 'mongoose'
 import router from './route'
-require('dotenv').config()
 
 Mongoose.Promise = global.Promise
 

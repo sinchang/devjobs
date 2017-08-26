@@ -50,3 +50,11 @@ export const sendMail = data => {
     data
   })
 }
+
+export const upload = data => {
+  return Http({
+    method: 'POST',
+    url: '/api/upload',
+    data
+  })
+}

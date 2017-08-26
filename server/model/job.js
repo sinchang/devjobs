@@ -38,8 +38,11 @@ const jobSchema = new Schema({
   },
   companyWebsite: {
     type: String,
-    required: true,
     default: ''
+  },
+  language: {
+    type: Array,
+    required: true
   },
   author: {
     type: Number,
