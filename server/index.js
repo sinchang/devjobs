@@ -8,6 +8,7 @@ require('dotenv').config()
 import bodyParser from 'body-parser'
 import Mongoose from 'mongoose'
 import router from './route'
+import { goGithub, callback } from './controller/github'
 
 Mongoose.Promise = global.Promise
 
@@ -26,6 +27,8 @@ app.use(bodyParser.urlencoded({
   extended: true
 }))
 app.use(bodyParser.json())
+app.get('/github/login', goGithub)
+app.get('/github/callback', callback)
 app.use('/api', router)
 
 // Import and Set Nuxt.js options

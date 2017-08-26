@@ -99,7 +99,7 @@ function formatJobs (req, jobs) {
   if (!jobs.length) return []
   return jobs.map(job => {
     job.type = type[job.type]
-    if (job.author._id === parseInt(decoded.id)) {
+    if (token && job.author._id === parseInt(decoded.id)) {
       job.isAuthor = true
     }
     job.language = job.language.map(v => {
