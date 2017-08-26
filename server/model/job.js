@@ -28,6 +28,10 @@ const jobSchema = new Schema({
     type: Boolean,
     default: true
   },
+  isAuthor: {
+    type: Boolean,
+    default: false
+  },
   companyName: {
     type: String,
     required: true,

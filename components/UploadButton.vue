@@ -4,6 +4,7 @@
     </v-card-media>
     <v-btn primary class="jbtn-file">
       {{ title }}<input id="selectFile" type="file" v-on:change="fileSelected">
+      <v-icon right dark>cloud_upload</v-icon>
     </v-btn>
   </div>
 </template>

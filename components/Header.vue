@@ -6,7 +6,9 @@
     <v-toolbar-items>
       <v-btn flat class="white--text" @click="goLogin" v-show="!username">登录</v-btn>
       <v-btn flat class="white--text" @click="goRegister" v-show="!username">注册</v-btn>
-      <v-btn flat class="white--text" @click="goNewPost" v-show="username">发布</v-btn>
+      <v-btn flat class="white--text" @click="goNewPost" v-show="username">
+        <v-icon>add</v-icon>
+      </v-btn>
     </v-toolbar-items>
 
     <v-menu v-show="username">

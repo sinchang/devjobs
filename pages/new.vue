@@ -137,4 +137,8 @@ export default {
 .tabs__items {
   border-color: #fff;
 }
+
+.tabs:not(.tabs--centered):not(.tabs--grow):not(.tabs--mobile) .tabs__wrapper--scrollable {
+  margin: 0;
+}
 </style>

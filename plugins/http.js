@@ -76,3 +76,10 @@ export const getJobs = data => {
     data
   })
 }
+
+export const getOneJob = id => {
+  return Http({
+    method: 'GET',
+    url: `/api/jobs/${id}`
+  })
+}

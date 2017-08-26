@@ -14,6 +14,7 @@ router.get('/user/jobs', user.checkToken, job.getUserJobs)
 router.post('/user/mail', user.sendMail)
 
 router.post('/jobs', user.checkToken, job.create)
+router.get('/jobs/:id', job.getOneJobs)
 router.get('/jobs', job.getJobs)
 
 router.post('/upload', user.checkToken, upload)
