@@ -20,6 +20,7 @@
     "express": "^4.15.3",
     "js-cookie": "^2.1.4",
     "jsonwebtoken": "^7.4.3",
+    "marked3": "^0.5.1",
     "mongoose": "^4.11.7",
     "mongoose-auto-increment": "^5.0.1",
     "mongoose-unique-validator": "^1.0.5",

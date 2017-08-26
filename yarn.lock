@@ -3530,6 +3530,12 @@ map-stream@~0.1.0:
   version "0.1.0"
   resolved "https://registry.yarnpkg.com/map-stream/-/map-stream-0.1.0.tgz#e56aa94c4c8055a16404a0674b78f215f7c8e194"
 
+marked3@^0.5.1:
+  version "0.5.1"
+  resolved "http://registry.npm.taobao.org/marked3/download/marked3-0.5.1.tgz#af006fe7d4f949d42f036c9a403094f7675d0db2"
+  dependencies:
+    slugo "^0.2.1"
+
 math-expression-evaluator@^1.2.14:
   version "1.2.17"
   resolved "https://registry.yarnpkg.com/math-expression-evaluator/-/math-expression-evaluator-1.2.17.tgz#de819fdbcd84dccd8fae59c6aeb79615b9d266ac"
@@ -5176,6 +5182,10 @@ slide@^1.1.5:
   version "1.1.6"
   resolved "https://registry.yarnpkg.com/slide/-/slide-1.1.6.tgz#56eb027d65b4d2dce6cb2e2d32c4d4afc9e1d707"
 
+slugo@^0.2.1:
+  version "0.2.1"
+  resolved "http://registry.npm.taobao.org/slugo/download/slugo-0.2.1.tgz#a44bb2c6a72a8921888b08fc18e3181e9dd7df8e"
+
 smart-buffer@^1.0.13:
   version "1.1.15"
   resolved "http://registry.npm.taobao.org/smart-buffer/download/smart-buffer-1.1.15.tgz#7f114b5b65fab3e2a35aa775bb12f0d1c649bf16"
@@ -5848,10 +5858,6 @@ vue-template-compiler@~2.4.2:
 vue-template-es2015-compiler@^1.5.3:
   version "1.5.3"
   resolved "https://registry.yarnpkg.com/vue-template-es2015-compiler/-/vue-template-es2015-compiler-1.5.3.tgz#22787de4e37ebd9339b74223bc467d1adee30545"
-
-vue-timeago@^3.3.6:
-  version "3.3.6"
-  resolved "http://registry.npm.taobao.org/vue-timeago/download/vue-timeago-3.3.6.tgz#c849042ddaf159f24c80ac317211a0d4b427e5fc"
 
 vue@~2.4.2:
   version "2.4.2"

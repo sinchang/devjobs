@@ -31,6 +31,7 @@ module.exports = {
    ** Global CSS
    */
   css: [
+    '~/assets/style/yue.css',
     '~/assets/style/app.styl'
   ],
   /*
@@ -43,7 +44,7 @@ module.exports = {
    ** Add axios globally
    */
   build: {
-    vendor: ['axios', 'vuetify', 'native-toast', 'vue-timeago'],
+    vendor: ['axios', 'vuetify', 'native-toast', 'timeago.js'],
     extractCSS: true,
     /*
      ** Run ESLINT on save

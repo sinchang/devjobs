@@ -8,7 +8,7 @@
           </v-stepper-step>
           <v-stepper-content step="1">
             <v-text-field label="输入公司名字" v-model="companyName" required></v-text-field>
-            <v-text-field label="输入公司网站" v-model="companyWebsite"  hint="url 必须包含http 或 https"></v-text-field>
+            <v-text-field label="输入公司网站" v-model="companyWebsite" hint="url 必须包含http 或 https"></v-text-field>
             <upload-button title="上传公司 logo" :src="src" :selectedCallback="fileSelectedFunc"></upload-button>
             <v-btn primary @click.native="e6 = 2">下一步</v-btn>
           </v-stepper-content>
@@ -23,7 +23,19 @@
           </v-stepper-content>
           <v-stepper-step step="3" v-bind:complete="e6 > 3">工作详情描述</v-stepper-step>
           <v-stepper-content step="3">
-            <v-text-field v-model="desc" label="请使用 MD 语法，详细描述招聘需求。" textarea light></v-text-field>
+            <v-tabs id="mobile-tabs-5" fixed>
+              <v-tabs-bar slot="activators">
+                <v-tabs-slider class="yellow"></v-tabs-slider>
+                <v-tabs-item :href="'#tab-0'" class="white--text">编辑</v-tabs-item>
+                <v-tabs-item :href="'#tab-1'" class="white--text">预览</v-tabs-item>
+              </v-tabs-bar>
+              <v-tabs-content :id="'tab-0'">
+                <v-text-field v-model="md" label="请使用 MD 语法，详细描述招聘需求。" textarea></v-text-field>
+              </v-tabs-content>
+              <v-tabs-content :id="'tab-1'">
+                <p v-html="desc" class="yue"></p>
+              </v-tabs-content>
+            </v-tabs>
             <v-btn primary @click.native="publishHandle">发布</v-btn>
             <v-btn flat @click.native="e6 = 2">返回</v-btn>
           </v-stepper-content>
@@ -35,6 +47,7 @@
 
 <script>
 import UploadButton from '../components/UploadButton'
+import marked3 from 'marked3'
 import { upload, publishJob } from '../plugins/http'
 
 export default {
@@ -50,6 +63,8 @@ export default {
       desc: '',
       location: '',
       language: [],
+      md: '',
+      isPreview: false,
       items: [
         { text: '全职', id: 0 },
         { text: '兼职', id: 1 },
@@ -68,6 +83,11 @@ export default {
         { text: 'Lua', id: 9 },
         { text: 'SQL', id: 10 }
       ]
+    }
+  },
+  watch: {
+    md (v) {
+      this.desc = marked3(v)
     }
   },
   methods: {
@@ -97,9 +117,6 @@ export default {
       location.href = '/'
     }
   },
-  created () {
-
-  },
   head () {
     return {
       title: '发布新工作'
@@ -110,3 +127,14 @@ export default {
   }
 }
 </script>
+
+<style>
+.application--light .tabs .tabs__item,
+.application--light .tabs .tabs__item.tabs__item--active {
+  color: #fff;
+}
+
+.tabs__items {
+  border-color: #fff;
+}
+</style>

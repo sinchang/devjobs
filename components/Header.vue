@@ -3,10 +3,12 @@
     <v-toolbar-title><a href="/" class="white--text">DeveloperJobs</a></v-toolbar-title>
     <v-spacer></v-spacer>
     </v-btn>
-    <v-toolbar-items v-show="!username">
-      <v-btn flat class="white--text" @click="goLogin">登录</v-btn></a>
-      <v-btn flat class="white--text" @click="goRegister">注册</v-btn>
+    <v-toolbar-items>
+      <v-btn flat class="white--text" @click="goLogin" v-show="!username">登录</v-btn>
+      <v-btn flat class="white--text" @click="goRegister" v-show="!username">注册</v-btn>
+      <v-btn flat class="white--text" @click="goNewPost" v-show="username">发布</v-btn>
     </v-toolbar-items>
+
     <v-menu v-show="username">
       <v-btn flat slot="activator" class="white--text">{{username}}
         <v-icon class="white--text">arrow_drop_down</v-icon>
@@ -46,6 +48,9 @@ export default {
     logout () {
       Cookie.remove('devJobs')
       location.href = '/'
+    },
+    goNewPost () {
+      location.href = '/new'
     }
   }
 }
