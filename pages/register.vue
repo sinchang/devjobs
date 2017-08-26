@@ -34,15 +34,13 @@ export default {
   },
   methods: {
     async register () {
-      const data = await register({
+      await register({
         username: this.username,
         password: this.password,
         repassword: this.repassword,
         email: this.email
       })
-      if (data) {
-        location.href = '/login'
-      }
+      location.href = '/login'
     }
   },
   created () {

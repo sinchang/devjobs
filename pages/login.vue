@@ -30,13 +30,11 @@ export default {
   },
   methods: {
     async loginHandle () {
-      const data = await login({
+      await login({
         username: this.username,
         password: this.password
       })
-      if (data) {
-        location.href = '/'
-      }
+      location.href = '/'
     }
   },
   created () {

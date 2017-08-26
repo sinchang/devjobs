@@ -43,7 +43,7 @@ module.exports = {
    ** Add axios globally
    */
   build: {
-    vendor: ['axios', 'vuetify'],
+    vendor: ['axios', 'vuetify', 'native-toast', 'vue-timeago'],
     extractCSS: true,
     /*
      ** Run ESLINT on save

@@ -20,7 +20,8 @@ exports.encrypt = (password) => {
 exports.signToken = user => {
   const token = Jwt.sign({
     username: user.username,
-    id: user._id
+    id: user._id,
+    admin: user.role === 'admin'
   }, process.env.SECRET_KEY, { expiresIn: '7d' })
   return token
 }

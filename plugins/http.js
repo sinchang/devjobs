@@ -13,12 +13,14 @@ const Http = function (options) {
   }
 
   const onError = error => {
-    toast({
-      message: error.response.data.message,
-      position: 'top',
-      timeout: 2000,
-      type: 'error'
-    })
+    if (error.response) {
+      toast({
+        message: error.response.data.message,
+        position: 'top',
+        timeout: 2000,
+        type: 'error'
+      })
+    }
     return Promise.reject(error.response || error.message)
   }
 
@@ -55,6 +57,22 @@ export const upload = data => {
   return Http({
     method: 'POST',
     url: '/api/upload',
+    data
+  })
+}
+
+export const publishJob = data => {
+  return Http({
+    method: 'POST',
+    url: '/api/jobs',
+    data
+  })
+}
+
+export const getJobs = data => {
+  return Http({
+    method: 'GET',
+    url: '/api/jobs',
     data
   })
 }

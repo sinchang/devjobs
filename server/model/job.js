@@ -8,7 +8,8 @@ autoIncrement.initialize(mongoose.connection)
 const jobSchema = new Schema({
   title: {
     type: String,
-    required: true
+    required: true,
+    minlength: 8
   },
   type: {
     type: String,
@@ -21,6 +22,7 @@ const jobSchema = new Schema({
   desc: {
     type: String,
     required: true
+    // minlength: 160
   },
   isActive: {
     type: Boolean,
@@ -38,7 +40,14 @@ const jobSchema = new Schema({
   },
   companyWebsite: {
     type: String,
-    default: ''
+    default: '',
+    validate: {
+      validator (v) {
+        /* eslint-disable */
+        return !!v.match(/(((^https?:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)$/g);
+      },
+      message: '{VALUE} is not a valid url!'
+    }
   },
   language: {
     type: Array,
