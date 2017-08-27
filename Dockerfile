@@ -4,7 +4,8 @@ RUN mkdir /app
 WORKDIR /app
 
 COPY . /app
-RUN npm install
+RUN npm install -g yarn
+RUN yarn
 
 ENV DB_URL mongodb://mongo:27017/devjobs
 ENV GMAIL_ADDRESS sinchangwen@gmail.com
