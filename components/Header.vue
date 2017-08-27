@@ -1,6 +1,11 @@
 <template>
   <v-toolbar dark class="primary">
-    <v-toolbar-title><a href="/" class="white--text">DeveloperJobs</a></v-toolbar-title>
+    <v-toolbar-title>
+      <a href="/" class="white--text">
+        <img src="../assets/img/pure_logo.png" alt="logo" height="50" class="logo">
+        <span class="title">DeveloperJobs</span>
+      </a>
+    </v-toolbar-title>
     <v-spacer></v-spacer>
     </v-btn>
     <v-toolbar-items>
@@ -61,5 +66,12 @@ export default {
 <style scoped>
   .toolbar__title a {
     text-decoration: none;
+  }
+  .logo, .title {
+    vertical-align: middle
+  }
+  .title {
+    padding-left: 10px;
+    font-size: 28px!important;
   }
 </style>

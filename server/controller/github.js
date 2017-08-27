@@ -36,20 +36,16 @@ export const callback = async (req, res) => {
       User.findOne({
         githubId: data.id
       }).then(user => {
-        console.log(user)
+        // console.log(user)
+        if (!user) {
+          githubRegister(req, res, newUser)
+          return
+        }
         githubLogin(res, user)
       })
     } catch (err) {
-      newUser.save().then(user => {
-        githubLogin(res, user)
-      }).catch(err => {
-        console.log(err)
-        req.body.username = req.body.email
-        const newUser = new User(req.body)
-        newUser.save().then(user => {
-          githubLogin(res, user)
-        })
-      })
+      console.log(err)
+      githubRegister(req, res, newUser)
     }
   } catch (err) {
     console.log(err)
@@ -65,5 +61,18 @@ function githubLogin (res, user) {
   }), {
     expires: new Date(Date.now() + 360000 * 24 * 7)
   })
-  res.redirect(process.env.HOST + process.env.PORT)
+  res.redirect('/')
+}
+
+function githubRegister (req, res, newUser) {
+  newUser.save().then(user => {
+    githubLogin(res, user)
+  }).catch(err => {
+    console.log(err)
+    req.body.username = req.body.email
+    const newUser = new User(req.body)
+    newUser.save().then(user => {
+      githubLogin(res, user)
+    })
+  })
 }
