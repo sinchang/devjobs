@@ -11,8 +11,8 @@
             <v-text-field label="输入密码" v-model="password" required type="password"></v-text-field>
             <v-btn primary @click="loginHandle">登录</v-btn>
             <p class="mt-3">
-              <a href="/register">注册账号</a> |
-              <a href="/resetpassword">忘记密码</a> |
+              <nuxt-link to="/register">注册账号</nuxt-link> |
+              <nuxt-link to="/resetpassword">忘记密码</nuxt-link> |
               <a href="/github/login">使用 GitHub 登录</a>
             </p>
           </v-card-text>
@@ -32,17 +32,14 @@ export default {
       password: ''
     }
   },
+  // middleware: 'isLogin',
   methods: {
     async loginHandle () {
       await login({
         username: this.username,
         password: this.password
       })
-      location.href = '/'
-    }
-  },
-  created () {
-    if (this.$store.state.token) {
+      // this.$router.push({ path: '/' })
       location.href = '/'
     }
   },

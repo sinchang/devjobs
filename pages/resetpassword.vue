@@ -25,11 +25,7 @@ export default {
       email: ''
     }
   },
-  created () {
-    if (this.$store.state.token) {
-      location.href = '/'
-    }
-  },
+  // middleware: 'isLogin',
   methods: {
     async sendMailHandle () {
       const data = await sendMail({

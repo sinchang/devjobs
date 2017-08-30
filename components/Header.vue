@@ -1,10 +1,10 @@
 <template>
   <v-toolbar dark class="primary">
     <v-toolbar-title>
-      <a href="/" class="white--text">
+      <nuxt-link to="/" class="white--text">
         <img src="../assets/img/pure_logo.png" alt="logo" height="50" class="logo">
         <span class="title">DeveloperJobs</span>
-      </a>
+      </nuxt-link>
     </v-toolbar-title>
     <v-spacer></v-spacer>
     </v-btn>
@@ -44,20 +44,21 @@ export default {
   },
   methods: {
     goLogin () {
-      location.href = '/login'
+      this.$router.push({ path: '/login' })
     },
     goRegister () {
-      location.href = '/register'
+      this.$router.push({ path: '/register' })
     },
     goUserCenter () {
-      location.href = `/${this.username}`
+      // TODO
     },
     logout () {
       Cookie.remove('devJobs')
-      location.href = '/'
+      location.href = ''
+      // this.$router.push({ path: '/' })
     },
     goNewPost () {
-      location.href = '/new'
+      this.$router.push({ path: '/new' })
     }
   }
 }

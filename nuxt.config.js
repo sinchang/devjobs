@@ -26,6 +26,9 @@ module.exports = {
       href: 'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons'
     }]
   },
+  router: {
+    // middleware: 'auth'
+  },
   plugins: ['~plugins/vuetify.js'],
   /*
    ** Global CSS
@@ -38,7 +41,7 @@ module.exports = {
    ** Customize the progress-bar color
    */
   loading: {
-    color: '#3B8070'
+    color: '#ff9800'
   },
   /*
    ** Add axios globally

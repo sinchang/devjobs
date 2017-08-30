@@ -24,6 +24,10 @@ const jobSchema = new Schema({
     required: true
     // minlength: 160
   },
+  descMd: {
+    type: String,
+    require: true
+  },
   isActive: {
     type: Boolean,
     default: true

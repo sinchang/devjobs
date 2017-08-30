@@ -12,7 +12,7 @@
             <v-text-field label="再次输入密码" v-model="repassword" required type="password"></v-text-field>
             <v-text-field label="邮箱" v-model="email" required type="email"></v-text-field>
             <v-btn primary @click="register">注册</v-btn>
-            <p class="mt-3">已经有账号？请前往<a href="/login">登录</a></p>
+            <p class="mt-3">已经有账号？请前往<nuxt-link to="/login">登录</nuxt-link></p>
           </v-card-text>
         </v-card>
       </v-flex>
@@ -32,6 +32,7 @@ export default {
       email: ''
     }
   },
+  // middleware: 'isLogin',
   methods: {
     async register () {
       await register({
@@ -40,12 +41,7 @@ export default {
         repassword: this.repassword,
         email: this.email
       })
-      location.href = '/login'
-    }
-  },
-  created () {
-    if (this.$store.state.token) {
-      location.href = '/login'
+      this.$router.push({ path: 'login' })
     }
   },
   head () {

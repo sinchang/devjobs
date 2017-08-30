@@ -11,14 +11,14 @@
             </v-btn> -->
           </v-toolbar>
           <v-list three-line subheader>
-              <v-list-tile avatar v-for="item in data" v-bind:key="item.title" :href="`jobs/${item._id}`">
+              <v-list-tile avatar v-for="item in data" v-bind:key="item.title" @click="goDetail(item._id)">
                 <v-list-tile-avatar>
                   <img v-bind:src="`http://7xnrti.com1.z0.glb.clouddn.com/${item.companyLogo}?imageView2/5/w/200/h/200/format/jpg/q/75|imageslim`" />
                 </v-list-tile-avatar>
                 <v-list-tile-content>
                   <v-list-tile-title>{{ item.title }}</v-list-tile-title>
                   <v-list-tile-sub-title>
-                    <v-list-tile-action-text>by <a :href="`/user/${item.author.username}`" target="_blank">{{item.author.username}}</a></v-list-tile-action-text>
+                    <v-list-tile-action-text>by <nuxt-link to="`/user/${item.author.username}`">{{item.author.username}}</nuxt-link></v-list-tile-action-text>
                     <v-chip class="orange white--text hidden-xs-only" small>
                       <a :href="item.companyWebsite" target="_blank">{{item.companyName}}</a>
                     </v-chip>
@@ -77,6 +77,9 @@ export default {
     timeago (date) {
       const timeagoInstance = timeago()
       return timeagoInstance.format(date, 'zh_CN')
+    },
+    goDetail (id) {
+      this.$router.push({ name: 'jobs-id', params: { id } })
     }
   },
   created () {

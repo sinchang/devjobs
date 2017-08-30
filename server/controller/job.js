@@ -20,11 +20,24 @@ const language = [
 ]
 exports.create = (req, res) => {
   req.body.author = req.id
+  const jobId = req.body.id
   const job = new Job(req.body)
+
+  if (jobId) {
+    Job.findOneAndUpdate({ _id: jobId, author: req.id }, req.body)
+      .then(user => {
+        res.status(200).json({
+          message: 'success'
+        })
+      }).catch(err => {
+        sendError(res, err)
+      })
+    return
+  }
 
   job.save()
     .then(user => {
-      return res.status(200).json({
+      res.status(200).json({
         message: 'success'
       })
     }).catch(err => {
@@ -58,7 +71,7 @@ exports.getJobs = (req, res) => {
   const curPage = parseInt(req.query.curPage, 10) < 1 ? 0 : req.query.curPage - 1
   const limit = req.query.limit || 10
 
-  Job.find({})
+  Job.find({ isActive: true })
     .populate('author', 'username')
     .limit(limit)
     .skip(curPage * limit)
@@ -90,6 +103,24 @@ exports.getOneJobs = (req, res) => {
       })
     }).catch(err => {
       sendError(res, err)
+    })
+}
+
+exports.close = (req, res) => {
+  console.log(req.body.id, req.body.isActive)
+  Job.findOneAndUpdate({ _id: req.body.id, author: req.id }, { isActive: req.body.isActive })
+    .then(job => {
+      console.log(job)
+      if (!job) {
+        return res.status(400).json({
+          message: 'The job information doesn\'t exist or you don\'t have access'
+        })
+      }
+      res.status(200).json({
+        message: 'success'
+      })
+    }).catch(err => {
+      sendError(err)
     })
 }
 

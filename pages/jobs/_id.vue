@@ -1,25 +1,31 @@
 <template>
   <v-container fluid>
     <v-layout row>
-      <v-flex xs12 md8 offset-md2 xl6 offset-xl-3>
+      <v-flex xs12 md8 offset-md2 xl6 offset-xl3>
         <article>
           <div class="entry-meta">
-            <a :href="`/user/${data.username}`">{{data.username}}</a> |
+            <nuxt-link to="`/user/${data.username}`">{{data.username}}</nuxt-link> |
             <a :href="data.companyWebsite">{{data.companyName}}</a> |
             {{timeago(data.createdAt)}}
-            <v-menu v-if="data.isAuthor">
+            <v-menu>
               <v-btn flat slot="activator">
                 <v-icon class="icon-toc">toc</v-icon>
               </v-btn>
               <v-list>
-                <v-list-tile @click="goEdit">
+                <v-list-tile @click="goEdit" v-if="data.isAuthor">
                   <v-list-tile-title>编辑</v-list-tile-title>
                 </v-list-tile>
-                <v-list-tile @click="cancel">
-                  <v-list-tile-title>下线</v-list-tile-title>
+                <v-list-tile @click="close" v-if="data.isAuthor">
+                  <v-list-tile-title>{{status}}</v-list-tile-title>
                 </v-list-tile>
-                <v-list-tile @click="share">
-                  <v-list-tile-title>分享</v-list-tile-title>
+                <v-list-tile @click="share" data-type="weixin">
+                  <v-list-tile-title>分享至微信</v-list-tile-title>
+                </v-list-tile>
+                <v-list-tile @click="share" data-type="weibo">
+                  <v-list-tile-title>分享至微博</v-list-tile-title>
+                </v-list-tile>
+                <v-list-tile @click="share" data-type="twitter">
+                  <v-list-tile-title>分享至 Twitter</v-list-tile-title>
                 </v-list-tile>
               </v-list>
             </v-menu>
@@ -38,13 +44,15 @@
 </template>
 
 <script>
-import { getOneJob } from '../../plugins/http'
+import { getOneJob, closeOneJob } from '../../plugins/http'
 import timeago from 'timeago.js'
+import toast from '../../plugins/toast'
 
 export default {
   data () {
     return {
-      data: {}
+      data: {},
+      status: '关闭'
     }
   },
   head () {
@@ -55,7 +63,14 @@ export default {
   methods: {
     async getOneJobHandle () {
       const { data } = await getOneJob(this.$route.params.id)
+      if (!data.author) {
+        this.$router.push({ path: '/404' })
+        return
+      }
       data.username = data.author.username
+      if (!data.isActive) {
+        this.status = '开启'
+      }
       this.data = data
     },
     timeago (date) {
@@ -66,10 +81,18 @@ export default {
 
     },
     goEdit () {
-
+      this.$router.push({ path: '/new', query: { id: this.$route.params.id, type: 'edit' } })
     },
-    cancel () {
-
+    async close () {
+      const isActive = this.status === '开启'
+      await closeOneJob({ id: this.$route.params.id, isActive: isActive })
+      toast({
+        message: isActive ? '开启成功' : '关闭成功',
+        position: 'top',
+        timeout: 2000,
+        type: 'success'
+      })
+      this.status = isActive ? '关闭' : '开启'
     }
   },
   created () {

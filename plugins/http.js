@@ -83,3 +83,11 @@ export const getOneJob = id => {
     url: `/api/jobs/${id}`
   })
 }
+
+export const closeOneJob = data => {
+  return Http({
+    method: 'PATCH',
+    url: `/api/jobs`,
+    data
+  })
+}
