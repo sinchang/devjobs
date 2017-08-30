@@ -47,6 +47,11 @@ export default {
     return {
       title: '登录'
     }
+  },
+  created () {
+    if (this.$store.state.token) {
+      this.$router.push({ path: '/' })
+    }
   }
 }
 </script>

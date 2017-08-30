@@ -48,6 +48,11 @@ export default {
     return {
       title: '注册'
     }
+  },
+  created () {
+    if (this.$store.state.token) {
+      this.$router.push({ path: '/' })
+    }
   }
 }
 </script>

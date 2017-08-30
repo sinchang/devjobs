@@ -38,6 +38,11 @@ export default {
     return {
       title: '找回密码'
     }
+  },
+  created () {
+    if (this.$store.state.token) {
+      this.$router.push({ path: '/' })
+    }
   }
 }
 </script>
