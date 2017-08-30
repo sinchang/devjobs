@@ -61,6 +61,9 @@ const jobSchema = new Schema({
     type: Array,
     required: true
   },
+  comment: {
+    type: Array
+  },
   author: {
     type: Number,
     ref: 'User'

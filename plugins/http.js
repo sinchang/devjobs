@@ -91,3 +91,18 @@ export const closeOneJob = data => {
     data
   })
 }
+
+export const getUserInfo = username => {
+  return Http({
+    method: 'GET',
+    url: `/api/user/${username}`
+  })
+}
+
+export const updateUserInfo = (username, data) => {
+  return Http({
+    method: 'PUT',
+    url: `/api/user/${username}`,
+    data
+  })
+}

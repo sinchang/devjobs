@@ -4,9 +4,10 @@
       <v-flex xs12 md8 offset-md2 xl6 offset-xl3>
         <article>
           <div class="entry-meta">
-            <nuxt-link to="`/user/${data.username}`">{{data.username}}</nuxt-link> |
+            <nuxt-link :to="`/user/${data.username}`">{{data.username}}</nuxt-link> |
             <a :href="data.companyWebsite">{{data.companyName}}</a> |
-            {{timeago(data.createdAt)}}
+            {{timeago(data.createdAt)}} |
+            <a href="javascript:;" v-if="!isActive">已关闭</a>
             <v-menu>
               <v-btn flat slot="activator">
                 <v-icon class="icon-toc">toc</v-icon>
@@ -18,13 +19,10 @@
                 <v-list-tile @click="close" v-if="data.isAuthor">
                   <v-list-tile-title>{{status}}</v-list-tile-title>
                 </v-list-tile>
-                <v-list-tile @click="share" data-type="weixin">
-                  <v-list-tile-title>分享至微信</v-list-tile-title>
-                </v-list-tile>
-                <v-list-tile @click="share" data-type="weibo">
+                <v-list-tile @click="share(0)" data-type="weibo">
                   <v-list-tile-title>分享至微博</v-list-tile-title>
                 </v-list-tile>
-                <v-list-tile @click="share" data-type="twitter">
+                <v-list-tile @click="share(1)" data-type="twitter">
                   <v-list-tile-title>分享至 Twitter</v-list-tile-title>
                 </v-list-tile>
               </v-list>
@@ -52,12 +50,13 @@ export default {
   data () {
     return {
       data: {},
-      status: '关闭'
+      status: '关闭',
+      isActive: true
     }
   },
   head () {
     return {
-      title: '首页'
+      title: this.data.title || '工作详情'
     }
   },
   methods: {
@@ -68,6 +67,7 @@ export default {
         return
       }
       data.username = data.author.username
+      this.isActive = data.isActive
       if (!data.isActive) {
         this.status = '开启'
       }
@@ -77,22 +77,29 @@ export default {
       const timeagoInstance = timeago()
       return timeagoInstance.format(date, 'zh_CN')
     },
-    share () {
-
+    share (i) {
+      if (i === 0) {
+        const url = `http://service.weibo.com/share/share.php?url=${location.href}&type=button&language=zh_cn&appkey=3977462330&title=${this.data.title} -- via developerJobs.cn&searchPic=true&style=simple`
+        window.open(url, 'newwindow', 'width=500,height=500')
+      }
+      if (i === 1) {
+        const url = `https://twitter.com/intent/tweet?text=${this.data.title} -- via developerJobs.cn&url=${location.href}`
+        window.open(url, 'newwindow', 'width=500,height=500')
+      }
     },
     goEdit () {
       this.$router.push({ path: '/new', query: { id: this.$route.params.id, type: 'edit' } })
     },
     async close () {
-      const isActive = this.status === '开启'
-      await closeOneJob({ id: this.$route.params.id, isActive: isActive })
+      this.isActive = this.status === '开启'
+      await closeOneJob({ id: this.$route.params.id, isActive: this.isActive })
       toast({
-        message: isActive ? '开启成功' : '关闭成功',
+        message: this.isActive ? '开启成功' : '关闭成功',
         position: 'top',
         timeout: 2000,
         type: 'success'
       })
-      this.status = isActive ? '关闭' : '开启'
+      this.status = this.isActive ? '关闭' : '开启'
     }
   },
   created () {

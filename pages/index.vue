@@ -10,39 +10,7 @@
               <v-icon>search</v-icon>
             </v-btn> -->
           </v-toolbar>
-          <v-list three-line subheader>
-              <v-list-tile avatar v-for="item in data" v-bind:key="item.title" @click="goDetail(item._id)">
-                <v-list-tile-avatar>
-                  <img v-bind:src="`http://7xnrti.com1.z0.glb.clouddn.com/${item.companyLogo}?imageView2/5/w/200/h/200/format/jpg/q/75|imageslim`" />
-                </v-list-tile-avatar>
-                <v-list-tile-content>
-                  <v-list-tile-title>{{ item.title }}</v-list-tile-title>
-                  <v-list-tile-sub-title>
-                    <v-list-tile-action-text>by <nuxt-link to="`/user/${item.author.username}`">{{item.author.username}}</nuxt-link></v-list-tile-action-text>
-                    <v-chip class="orange white--text hidden-xs-only" small>
-                      <a :href="item.companyWebsite" target="_blank">{{item.companyName}}</a>
-                    </v-chip>
-                    <v-chip class="orange white--text hidden-xs-only">
-                      {{item.location}}
-                    </v-chip>
-                    <v-chip class="orange white--text hidden-xs-only" small>
-                      {{item.type}}
-                    </v-chip>
-                    <v-chip class="orange white--text hidden-xs-only" v-for="(v, i) in item.language" :key="i" small>
-                      {{v}}
-                    </v-chip>
-                  </v-list-tile-sub-title>
-                </v-list-tile-content>
-                <v-list-tile-action>
-                  <v-list-tile-action-text>
-                    {{timeago(item.createdAt)}}
-                  </v-list-tile-action-text>
-                  <!-- <v-btn icon ripple>
-                    <v-icon class="grey--text text--lighten-1">info</v-icon>
-                  </v-btn> -->
-                </v-list-tile-action>
-              </v-list-tile>
-          </v-list>
+          <joblist :data="data"></joblist>
         </v-card>
       </v-flex>
     </v-layout>
@@ -51,8 +19,7 @@
 
 <script>
 import { getJobs } from '../plugins/http'
-import timeago from 'timeago.js'
-
+import JobList from '../components/JobList'
 export default {
   data () {
     return {
@@ -73,29 +40,13 @@ export default {
       })
       this.curPage++
       this.data = data
-    },
-    timeago (date) {
-      const timeagoInstance = timeago()
-      return timeagoInstance.format(date, 'zh_CN')
-    },
-    goDetail (id) {
-      this.$router.push({ name: 'jobs-id', params: { id } })
     }
   },
   created () {
     this.getJobsHandle()
+  },
+  components: {
+    joblist: JobList
   }
 }
 </script>
-
-<style scoped>
-.list__tile__sub-title .chip a {
-  color: #fff;
-}
-.list__tile a {
-  text-decoration: none;
-}
-.list {
-  padding: 0;
-}
-</style>

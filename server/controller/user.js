@@ -1,7 +1,7 @@
 'use strict'
-const { isEmail } = require('../../util')
+const { isEmail, isEmptyObject } = require('../../util')
 const User = require('../model/user')
-
+const jobController = require('../controller/job')
 const {
   sentMailVerificationLink
 } = require('../common/mail')
@@ -16,36 +16,7 @@ const {
 } = require('../common/crypto')
 
 exports.register = (req, res) => {
-  const pw = req.body.password
-  const repassword = req.body.repassword
-  const username = req.body.username
-  const email = req.body.email
-
-  if (pw.length <= 6) {
-    return res.status(400).json({
-      message: 'The password length must be greater than 6'
-    })
-  }
-
-  if (pw !== repassword) {
-    return res.status(400).json({
-      message: 'The two passwords are not equal'
-    })
-  }
-
-  if (!isEmail(email)) {
-    return res.status(400).json({
-      message: 'Incorrect email'
-    })
-  }
-
-  const password = pw && encrypt(pw)
-  const user = new User({
-    password,
-    email,
-    username
-  })
-
+  const user = validateUser(req, res, true)
   user.save()
     .then(user => {
       const token = signToken(user)
@@ -65,8 +36,19 @@ exports.register = (req, res) => {
 }
 
 exports.updateInfo = (req, res) => {
-  User.findByIdAndUpdate(req.id, req.body)
+  const user = validateUser(req, res, false)
+  if (isEmptyObject(user)) {
+    return res.status(400).json({
+      message: 'username can not update'
+    })
+  }
+  User.findOneAndUpdate({ username: req.params.username }, user)
     .then(user => {
+      if (!user) {
+        return res.status(400).json({
+          message: 'user does not exist'
+        })
+      }
       res.status(200).json({
         message: 'success'
       })
@@ -176,4 +158,71 @@ exports.sendMail = (req, res) => {
   }).catch(err => {
     sendError(res, err)
   })
+}
+
+exports.getUserInfo = (req, res) => {
+  const username = req.params.username
+  const token = req.headers.token
+  const decoded = verifyToken(token)
+  req.username = username
+  User.findOne({ username })
+    .then(user => {
+      if (!user) {
+        return res.status(400).json({
+          message: 'user don\'t exist'
+        })
+      }
+      req.id = user._id
+      jobController.getUserJobs(req, res, (jobs) => {
+        if (!jobs) {
+          return res.status(400).json({
+            message: 'find jobs catch error'
+          })
+        }
+        const ret = {
+          username: user.username,
+          email: user.email,
+          jobs: jobs,
+          message: 'success'
+        }
+        if (username === decoded.username) {
+          ret.isAuthor = true
+        }
+        res.status(200).json(ret)
+      })
+    }).catch(err => {
+      sendError(res, err)
+    })
+}
+
+function validateUser (req, res, hasUsername) {
+  const pw = req.body.password
+  const repassword = req.body.repassword
+  const username = req.body.username
+  const email = req.body.email
+
+  if (pw && pw.length <= 6) {
+    return res.status(400).json({
+      message: 'The password length must be greater than 6'
+    })
+  }
+
+  if (pw && pw !== repassword) {
+    return res.status(400).json({
+      message: 'The two passwords are not equal'
+    })
+  }
+
+  if (email && !isEmail(email)) {
+    return res.status(400).json({
+      message: 'Incorrect email'
+    })
+  }
+
+  const password = pw && encrypt(pw)
+  const user = {}
+  if (pw) user.password = password
+  if (email) user.email = email
+  if (hasUsername) user.username = username
+  return user
 }

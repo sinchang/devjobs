@@ -3,7 +3,7 @@
     <v-toolbar-title>
       <nuxt-link to="/" class="white--text">
         <img src="../assets/img/pure_logo.png" alt="logo" height="50" class="logo">
-        <span class="title">DeveloperJobs</span>
+        <span class="title hidden-xs-only">DeveloperJobs</span>
       </nuxt-link>
     </v-toolbar-title>
     <v-spacer></v-spacer>
@@ -50,7 +50,7 @@ export default {
       this.$router.push({ path: '/register' })
     },
     goUserCenter () {
-      // TODO
+      this.$router.push({ path: `/user/${this.$store.state.username}` })
     },
     logout () {
       Cookie.remove('devJobs')

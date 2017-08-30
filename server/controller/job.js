@@ -1,6 +1,7 @@
 'use strict'
 const { verifyToken } = require('../common/crypto.js')
 const Job = require('../model/job')
+const User = require('../model/user')
 const {
   sendError
 } = require('../common/errorHandler')
@@ -11,12 +12,12 @@ const language = [
   'Python',
   'Ruby',
   'Java',
-  'Objective-C/Swift',
+  'iOS',
   'PHP',
   'C, C++ and C#',
   'Go',
-  'Lua',
-  'SQL'
+  'Android',
+  'Devops'
 ]
 exports.create = (req, res) => {
   req.body.author = req.id
@@ -25,7 +26,12 @@ exports.create = (req, res) => {
 
   if (jobId) {
     Job.findOneAndUpdate({ _id: jobId, author: req.id }, req.body)
-      .then(user => {
+      .then(job => {
+        if (!job) {
+          return res.status(400).json({
+            message: 'The job information doesn\'t exist or you don\'t have access'
+          })
+        }
         res.status(200).json({
           message: 'success'
         })
@@ -51,19 +57,47 @@ exports.create = (req, res) => {
     })
 }
 
-exports.getUserJobs = (req, res) => {
+exports.createComment = (req, res) => {
+  const jobId = req.body.id
+  const content = req.body.content
+  const contentMd = req.body.contentMd
+  if (!content || !contentMd) {
+    return res.status(400).json({
+      message: 'content and contentMd params is required'
+    })
+  }
+  const comment = {
+    author: req.username,
+    content: req.body.content,
+    contentMd: req.body.contentMd,
+    createdAt: new Date()
+  }
+  Job.findOneAndUpdate({ _id: jobId }, { $push: { comment } })
+    .then(job => {
+      // console.log(job)
+      if (!job) {
+        return res.status(400).json({
+          message: 'The job information doesn\'t exist or you don\'t have access'
+        })
+      }
+      res.status(200).json({
+        message: 'success'
+      })
+    }).catch(err => {
+      sendError(res, err)
+    })
+}
+
+exports.getUserJobs = (req, res, cb) => {
   Job.find({
     author: req.id
   }).populate('author', 'username')
     .exec()
     .then(jobs => {
-      jobs = formatJobs(req, jobs)
-      res.status(200).json({
-        message: 'success',
-        data: jobs
-      })
+      cb && cb(formatJobs(req, jobs))
     }).catch(err => {
-      sendError(res, err)
+      cb && cb()
+      console.log(err)
     })
 }
 
