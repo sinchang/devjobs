@@ -6,30 +6,28 @@
           <v-toolbar extended>
             <v-toolbar-title slot="extension" class="display-2">{{username}}</v-toolbar-title>
           </v-toolbar>
-          <v-tabs-bar slot="activators">
+          <v-tabs-bar>
             <v-tabs-slider class="yellow"></v-tabs-slider>
-            <v-tabs-item :href="'#tab-0'">
-              基本信息
-            </v-tabs-item>
-            <v-tabs-item :href="'#tab-1'">
-              我发布的
-            </v-tabs-item>
+            <v-tabs-item :href="'#tab-0'">基本信息</v-tabs-item>
+            <v-tabs-item :href="'#tab-1'">我的发布</v-tabs-item>
           </v-tabs-bar>
-          <v-tabs-content :id="'tab-0'">
-            <v-card flat>
-              <v-card-text>
-                <v-text-field label="邮箱" v-model="email" class="input-group--focused"></v-text-field>
-                <v-text-field label="密码" v-model="password" type="password" class="input-group--focused"></v-text-field>
-                <v-text-field label="密码确认" v-model="repassword" type="password" class="input-group--focused"></v-text-field>
-                <v-btn primary @click="updateHandle">修改</v-btn>
-              </v-card-text>
-            </v-card>
-          </v-tabs-content>
-          <v-tabs-content :id="'tab-1'">
-            <v-card flat>
-             <joblist :data="data"></joblist>
-            </v-card>
-          </v-tabs-content>
+          <v-tabs-items>
+            <v-tabs-content :id="'tab-0'">
+              <v-card flat>
+                <v-card-text>
+                  <v-text-field label="邮箱" v-model="email" class="input-group--focused" :readonly="!isAuthor"></v-text-field>
+                  <v-text-field label="密码" v-model="password" type="password" class="input-group--focused" v-if="isAuthor"></v-text-field>
+                  <v-text-field label="密码确认" v-model="repassword" type="password" class="input-group--focused" v-if="isAuthor"></v-text-field>
+                  <v-btn primary @click="updateHandle" v-if="isAuthor">修改</v-btn>
+                </v-card-text>
+              </v-card>
+            </v-tabs-content>
+            <v-tabs-content :id="'tab-1'">
+              <v-card flat>
+                <joblist :data="data"></joblist>
+              </v-card>
+            </v-tabs-content>
+          </v-tabs-items>
         </v-tabs>
       </v-flex>
     </v-layout>
@@ -46,7 +44,8 @@ export default {
       password: '',
       repassword: '',
       username: '',
-      data: []
+      data: [],
+      isAuthor: false
     }
   },
   head () {
@@ -72,6 +71,7 @@ export default {
     this.email = data.email
     this.username = data.username
     this.data = data.jobs
+    this.isAuthor = data.isAuthor
   },
   components: {
     joblist: JobList

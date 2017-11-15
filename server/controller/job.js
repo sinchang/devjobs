@@ -1,7 +1,6 @@
 'use strict'
 const { verifyToken } = require('../common/crypto.js')
 const Job = require('../model/job')
-const User = require('../model/user')
 const {
   sendError
 } = require('../common/errorHandler')
@@ -60,16 +59,16 @@ exports.create = (req, res) => {
 exports.createComment = (req, res) => {
   const jobId = req.body.id
   const content = req.body.content
-  const contentMd = req.body.contentMd
-  if (!content || !contentMd) {
+  // const contentMd = req.body.contentMd
+  if (!content) {
     return res.status(400).json({
-      message: 'content and contentMd params is required'
+      message: 'content params is required'
     })
   }
   const comment = {
     author: req.username,
     content: req.body.content,
-    contentMd: req.body.contentMd,
+    // contentMd: req.body.contentMd,
     createdAt: new Date()
   }
   Job.findOneAndUpdate({ _id: jobId }, { $push: { comment } })
@@ -102,9 +101,8 @@ exports.getUserJobs = (req, res, cb) => {
 }
 
 exports.getJobs = (req, res) => {
-  const curPage = parseInt(req.query.curPage, 10) < 1 ? 0 : req.query.curPage - 1
+  const curPage = parseInt(req.query.curPage, 10) < 1 || !req.query.curPage ? 0 : req.query.curPage - 1
   const limit = req.query.limit || 10
-
   Job.find({ isActive: true })
     .populate('author', 'username')
     .limit(limit)
@@ -114,11 +112,17 @@ exports.getJobs = (req, res) => {
     })
     .exec()
     .then(jobs => {
-      jobs = formatJobs(req, jobs)
-      res.status(200).json({
-        message: 'success',
-        data: jobs
-      })
+      Job.count().exec()
+        .then(count => {
+          jobs = formatJobs(req, jobs)
+          res.status(200).json({
+            message: 'success',
+            curPage: curPage,
+            limit: limit,
+            data: jobs,
+            hasNextPage: count > (curPage + 1) * limit
+          })
+        })
     }).catch(err => {
       sendError(res, err)
     })

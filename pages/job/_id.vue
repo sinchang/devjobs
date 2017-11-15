@@ -36,27 +36,73 @@
           <div class="yue" v-html="data.desc">
           </div>
         </article>
+        <v-list>
+          <v-subheader v-text="`共 ${data.comment && data.comment.length} 条评论`"></v-subheader>
+          <template v-for="(item, index) in data.comment">
+            <v-list-tile avatar v-bind:key="index">
+              <v-list-tile-avatar>
+                <img v-bind:src="item.avatar"/>
+              </v-list-tile-avatar>
+              <v-list-tile-content>
+                <v-list-tile-title>{{item.author}}
+                  <span class="comment-createAt">{{timeago(item.createdAt)}}</span>
+                </v-list-tile-title>
+                <v-list-tile-sub-title v-html="item.content"></v-list-tile-sub-title>
+              </v-list-tile-content>
+            </v-list-tile>
+          </template>
+        </v-list>
+        <v-card class="elevation-0" v-show="isLogin">
+          <v-card-text>
+            <v-subheader>添加回复</v-subheader>
+            <v-container fluid class="comment-container">
+              <v-layout row>
+                <v-flex xs12>
+                  <v-text-field
+                    class="comment-textarea"
+                    v-model="content"
+                    textarea
+                  ></v-text-field>
+                  <v-btn primary @click="submitCommentHandle">回复</v-btn>
+                </v-flex>
+              </v-layout>
+            </v-container>
+          </v-card-text>
+        </v-card>
       </v-flex>
     </v-layout>
   </v-container>
 </template>
 
 <script>
-import { getOneJob, closeOneJob } from '../../plugins/http'
+import { getOneJob, closeOneJob, submitComment } from '../../plugins/http'
 import timeago from 'timeago.js'
 import toast from '../../plugins/toast'
+// import marked3 from 'marked3'
 
 export default {
   data () {
     return {
       data: {},
       status: '关闭',
+      // contentMd: '',
+      content: '',
       isActive: true
     }
   },
   head () {
     return {
       title: this.data.title || '工作详情'
+    }
+  },
+  // watch: {
+  //   contentMd (v) {
+  //     this.content = marked3(v)
+  //   }
+  // },
+  computed: {
+    isLogin () {
+      return this.$store.state.token
     }
   },
   methods: {
@@ -100,6 +146,13 @@ export default {
         type: 'success'
       })
       this.status = this.isActive ? '关闭' : '开启'
+    },
+    async submitCommentHandle () {
+      await submitComment({
+        id: this.$route.params.id,
+        content: this.content
+        // contentMd: this.contentMd
+      })
     }
   },
   created () {
@@ -108,7 +161,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 .entry-meta {
   color: #607d8b;
 }
@@ -124,5 +177,18 @@ export default {
   margin-top: 10px;
   padding-bottom: 10px;
   border-bottom: 1px solid #ededee;
+}
+.comment-textarea {
+  padding-top: 0;
+}
+.comment-textarea .input-group__input {
+  padding: 13px!important;
+}
+.comment-createAt {
+  font-size: 12px;
+  color: #ccc;
+}
+.comment-container {
+  padding: 0;
 }
 </style>

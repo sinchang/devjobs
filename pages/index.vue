@@ -12,6 +12,9 @@
           </v-toolbar>
           <joblist :data="data"></joblist>
         </v-card>
+         <div class="text-xs-center">
+            <v-btn light :loading="loading" @click="loadMore" v-if="hasNextPage">加载更多</v-btn>
+          </div>
       </v-flex>
     </v-layout>
   </v-container>
@@ -24,7 +27,10 @@ export default {
   data () {
     return {
       curPage: 1,
-      data: []
+      limit: 20,
+      data: [],
+      loading: false,
+      hasNextPage: true
     }
   },
   head () {
@@ -34,12 +40,15 @@ export default {
   },
   methods: {
     async getJobsHandle () {
-      const { data } = await getJobs({
-        curPage: this.curPage,
-        limit: 10
-      })
+      this.loading = true
+      const { data, hasNextPage } = await getJobs(this.curPage, this.limit)
+      this.hasNextPage = hasNextPage
+      this.loading = false
+      this.data = this.data.concat(data)
+    },
+    loadMore () {
       this.curPage++
-      this.data = data
+      this.getJobsHandle()
     }
   },
   created () {

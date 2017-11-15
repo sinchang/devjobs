@@ -16,7 +16,7 @@ const {
 } = require('../common/crypto')
 
 exports.register = (req, res) => {
-  const user = validateUser(req, res, true)
+  const user = new User(validateUser(req, res, true))
   user.save()
     .then(user => {
       const token = signToken(user)

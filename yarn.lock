@@ -2214,10 +2214,6 @@ etag@^1.8.0, etag@~1.8.0:
   version "1.8.0"
   resolved "https://registry.yarnpkg.com/etag/-/etag-1.8.0.tgz#6f631aef336d6c46362b51764044ce216be3c051"
 
-europa@^4.0.0:
-  version "4.0.0"
-  resolved "http://registry.npm.taobao.org/europa/download/europa-4.0.0.tgz#637a236a6995217941f1440e378deafcf9ce0d9a"
-
 event-emitter@~0.3.5:
   version "0.3.5"
   resolved "https://registry.yarnpkg.com/event-emitter/-/event-emitter-0.3.5.tgz#df8c69eef1647923c7157b9ce83840610b02cc39"
@@ -5867,9 +5863,9 @@ vue@~2.4.2:
   version "2.4.2"
   resolved "https://registry.yarnpkg.com/vue/-/vue-2.4.2.tgz#a9855261f191c978cc0dc1150531b8d08149b58c"
 
-vuetify@^0.14.11:
-  version "0.14.11"
-  resolved "http://registry.npm.taobao.org/vuetify/download/vuetify-0.14.11.tgz#757760664373ba7a51d70d41a4b527595bbfed36"
+vuetify@0.15.1:
+  version "0.15.1"
+  resolved "http://registry.npm.taobao.org/vuetify/download/vuetify-0.15.1.tgz#a6ba0314c63d198cc43f2f172a0332394fc42a9e"
 
 vuex@^2.3.1:
   version "2.3.1"

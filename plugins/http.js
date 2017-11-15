@@ -69,11 +69,10 @@ export const publishJob = data => {
   })
 }
 
-export const getJobs = data => {
+export const getJobs = (curPage, limit) => {
   return Http({
     method: 'GET',
-    url: '/api/jobs',
-    data
+    url: `/api/jobs?curPage=${curPage}&limit=${limit}`
   })
 }
 
@@ -103,6 +102,14 @@ export const updateUserInfo = (username, data) => {
   return Http({
     method: 'PUT',
     url: `/api/user/${username}`,
+    data
+  })
+}
+
+export const submitComment = data => {
+  return Http({
+    method: 'POST',
+    url: `/api/jobs/comment`,
     data
   })
 }
